@@ -1,0 +1,79 @@
+#Three functions with error handling, will encode or decode words based on if they were already encoded or decoded
+
+Function Sentence
+    {
+    $String = Read-Host "Enter a word or sentence"
+    $global:string = $String
+    $global:dsentence = $null
+    $global:esentence = $null
+    }
+
+Function Encode-Words
+    {
+    if ($global:string -eq $null)
+        {
+        Write-Host Nothing to encode
+        break
+        }
+    else
+        {
+        if ($global:dsentence -ne $null)
+            {
+            $global:string = $global:dsentence
+            }
+        else
+            {
+            Write-Host "No origin word to encode, moving on"
+            }
+            $SplitString = $global:string.Split()
+            $WordArr = @()
+
+            foreach ($word in $splitstring)
+                {
+                $chararray = $word.ToCharArray()
+                [array]::Reverse($chararray)
+                $rword = -join($chararray)
+
+                $WordArr +=@($rword)
+                }
+            $esentence = [string]::Join(' ',$WordArr)
+            $global:esentence = $esentence
+            $esentence
+        }
+
+    }
+
+Function Decode-Words
+    {
+    if ($global:string -eq $null)
+        {
+        Write-Host Nothing to decode
+        break
+        }
+    else
+        {
+        if ($global:esentence -ne $null)
+            {
+            $global:string = $global:esentence
+            }
+        else
+            {
+            Write-Host "No origin word to decode, moving on"
+            }
+            $SplitString = $global:string.Split()
+            $WordArr = @()
+
+            foreach ($word in $splitstring)
+                {
+                $chararray = $word.ToCharArray()
+                [array]::Reverse($chararray)
+                $rword = -join($chararray)
+
+                $WordArr +=@($rword)
+                }
+            $dsentence = [string]::Join(' ',$WordArr)
+            $global:dsentence = $dsentence
+            $dsentence
+        }
+
+    }
