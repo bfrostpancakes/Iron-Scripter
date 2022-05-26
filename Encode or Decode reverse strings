@@ -4,6 +4,8 @@ Function Sentence
     {
     $String = Read-Host "Enter a word or sentence"
     $global:string = $String
+
+    #Set global string, clear any existing strings
     $global:dsentence = $null
     $global:esentence = $null
     }
