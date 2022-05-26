@@ -1,0 +1,16 @@
+Function winverstuff
+    {
+    $Owner = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name RegisteredOwner
+    $Org = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name RegisteredOrganization
+    Write-Host Owner: $Owner.RegisteredOwner
+    Write-Host Org: $Org.RegisteredOrganization
+    }
+
+Function SetOwnerandOrg
+    {
+    $newowner = Read-Host Enter registered owners email address
+    $neworg = Read-Host Enter registered organization
+
+    Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name RegisteredOrganization -Value "$neworg"
+    Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name RegisteredOwner -Value "$newowner"
+    }
