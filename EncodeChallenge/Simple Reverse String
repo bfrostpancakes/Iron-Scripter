@@ -1,5 +1,0 @@
-$a = "Powershell"
-$b = $a.ToCharArray()
-[array]::Reverse($b)
-$c = -join($b)
-$c
