@@ -1,0 +1,52 @@
+#Operational Params
+#$cred = Get-Credential
+$ServerQuestion = Read-Host Enter server name or a path to a text file list of servers
+
+#Determine input file
+if ($ServerQuestion -like "*.txt")
+    {
+    Write-Host "An input file has been specified"
+    $ServerList = Get-Content $ServerQuestion
+    }
+else
+    {
+    Write-Host "A single server has been specified"
+    $ServerList = $ServerQuestion
+    }
+
+#Notify user of options
+Write-Host "Either use Get-Info or Set-Info to get or set registry settings"
+
+#GET
+Function Get-Info
+    {
+    foreach ($Server in $ServerList)
+        {
+        Write-Host Getting info for $Server
+        $Owner = Invoke-Command -ComputerName $Server -Credential $Cred {Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name RegisteredOwner}
+        $Organization = Invoke-Command -ComputerName $Server -Credential $Cred {Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name RegisteredOrganization}
+
+        $ServerInfo = [pscustomobject]@{
+                                       Server = $Server;
+                                       Owner = $Owner.RegisteredOwner;
+                                       Organization = $Organization.RegisteredOrganization
+                                       }
+        $ServerInfo
+        }
+    }
+
+#SET
+Function Set-Info
+    {
+    foreach ($Server in $ServerList)
+        {
+         $newowner = Read-Host Enter registered owners email address
+         $neworg = Read-Host Enter registered organization
+
+         Write-Host Setting info for $Server
+         Invoke-Command -ComputerName $Server -Credential $cred -ArgumentList $newowner {param($newowner) Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name RegisteredOwner -Value $newowner}
+         Invoke-Command -ComputerName $Server -Credential $cred  -ArgumentList $neworg {param ($neworg) Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name RegisteredOrganization -Value $neworg}
+
+         Get-Info
+        }
+    }
