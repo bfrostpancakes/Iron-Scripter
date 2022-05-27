@@ -1,5 +1,5 @@
 #Operational Params
-#$cred = Get-Credential
+$cred = Get-Credential
 $ServerQuestion = Read-Host Enter server name or a path to a text file list of servers
 
 #Determine input file
